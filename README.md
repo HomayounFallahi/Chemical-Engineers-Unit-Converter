@@ -7,10 +7,11 @@ A fast, **offline**, zero-dependency unit converter focused on chemical &amp; pr
 You don’t need to install anything—just **download the HTML file** and open it in your browser!
 🔗 **[Download](https://github.com/HomayounFallahi/Chemical-Engineers-Unit-Converter/releases/download/Downloads/Chemical.Engineers.Unit.Converter.html)**
 
-![Light Mode](docs/screenshot-light.png)
-![Dark Mode](docs/screenshot-dark.png)
-![Miniapp Mode](docs/screenshowt-dark.png)
-
+<div align="center">
+  <a href="/Images/light.png"><img src="/Images/light.png" width="30%" alt="Light Mode"></a>
+  <a href="/Images/dark.png"><img src="/Images/dark.png" width="30%" alt="Dark Mode"></a>
+  <a href="/Images/FlowRateEquivalence.png"><img src="/Images/FlowRateEquivalence.png" width="30%" alt="Miniapp Mode"></a>
+</div>
 
 ## ✨ Features
 
