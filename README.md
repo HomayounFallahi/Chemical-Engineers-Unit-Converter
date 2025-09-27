@@ -8,9 +8,9 @@ You don’t need to install anything—just **download the HTML file** and open 
 🔗 **[Download](https://github.com/HomayounFallahi/Chemical-Engineers-Unit-Converter/releases/download/Downloads/Chemical.Engineers.Unit.Converter.html)**
 
 <div align="center">
-  <a href="/Images/light.png"><img src="/Images/light.png" width="30%" alt="Light Mode"></a>
-  <a href="/Images/dark.png"><img src="/Images/dark.png" width="30%" alt="Dark Mode"></a>
-  <a href="/Images/FlowRateEquivalence.png"><img src="/Images/FlowRateEquivalence.png" width="30%" alt="Miniapp Mode"></a>
+  <img src="/Images/light.png" alt="Light Mode" width="45%"/>
+  <img src="/Images/FlowRateEquivalence.png" alt="Miniapp Mode" width="45%"/>
+  <img src="/Images/dark.png" alt="Dark Mode" width="90%"/>
 </div>
 
 ## ✨ Features
