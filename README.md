@@ -5,7 +5,7 @@ A fast, **offline**, zero-dependency unit converter focused on chemical &amp; pr
 
 ## 📥 Download and Use Directly
 You don’t need to install anything—just **download the HTML file** and open it in your browser!
-🔗 **[Download](https://github.com/HomayounFallahi/Chemical-Engineers-Unit-Converter/releases/download/Downloads/Chemical.Engineers.Unit.Converter.html)**
+🔗 **[Download](https://github.com/HomayounFallahi/Chemical-Engineers-Unit-Converter/releases/download/Downloads/Chemical-Engineers-Unit-Converter.html)**
 
 <div align="center">
   <img src="/Images/light.png" alt="Light Mode" width="45%"/>
