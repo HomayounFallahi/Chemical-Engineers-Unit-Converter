@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chemical Engineers Unit Converter</title>
+<style>
+:root {
+/* Light Mode Colors (Default) */
+--bg-primary: #f7fafc;
+--bg-secondary: #edf2f7;
+--bg-tertiary: #ffffff;
+--text-primary: #2d3748;
+--text-secondary: #4a5568;
+--text-tertiary: #a0aec0;
+--border-color: #e2e8f0;
+--accent-primary: #667eea;
+--accent-hover: #5a67d8;
+--error-bg: #fed7d7;
+--error-text: #e53e3e;
+--shadow-color: rgba(0,0,0,0.1);
+--body-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.dark-mode {
+/* Dark Mode Colors */
+--bg-primary: #1a202c;
+--bg-secondary: #2d3748;
+--bg-tertiary: #252e3d;
+--text-primary: #f7fafc;
+--text-secondary: #e2e8f0;
+--text-tertiary: #a0aec0;
+--border-color: #4a5568;
+--accent-primary: #9f7aea;
+--accent-hover: #805ad5;
+--error-bg: #4a1d1d;
+--error-text: #feb2b2;
+--shadow-color: rgba(0,0,0,0.4);
+--body-gradient: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+}
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+background: var(--body-gradient);
+color: var(--text-primary);
+min-height: 100vh;
+padding: 20px;
+display: flex;
+justify-content: center;
+align-items: flex-start;
+transition: background 0.3s ease;
+}
+
+.container {
+background: var(--bg-tertiary);
+border-radius: 16px;
+box-shadow: 0 20px 40px var(--shadow-color);
+padding: 24px;
+width: 95vw;
+max-width: 900px;
+display: flex;
+flex-direction: column;
+transition: background 0.3s ease, color 0.3s ease;
+}
+
+h1 {
+text-align: center;
+margin-bottom: 16px;
+color: var(--text-primary);
+font-size: 28px;
+font-weight: 700;
+}
+
+.header-controls {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 24px;
+flex-wrap: wrap;
+gap: 10px;
+}
+
+/* Theme Switcher */
+.theme-switch-wrapper {
+display: flex;
+align-items: center;
+gap: 8px;
+color: var(--text-secondary);
+}
+.theme-switch {
+position: relative;
+display: inline-block;
+width: 50px;
+height: 28px;
+}
+.theme-switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: var(--bg-secondary);
+transition: .4s;
+border-radius: 28px;
+}
+.slider:before {
+position: absolute;
+content: "";
+height: 20px;
+width: 20px;
+left: 4px;
+bottom: 4px;
+background-color: white;
+transition: .4s;
+border-radius: 50%;
+background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23f6e05e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>');
+background-repeat: no-repeat;
+background-position: center;
+}
+input:checked + .slider {
+background-color: var(--accent-primary);
+}
+input:checked + .slider:before {
+transform: translateX(22px);
+background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>');
+}
+
+.flow-rate-btn {
+background-color: var(--accent-primary);
+color: white;
+border: none;
+padding: 10px 20px;
+border-radius: 8px;
+font-weight: 600;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+.flow-rate-btn:hover { background-color: var(--accent-hover); }
+
+.category-controls {
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: wrap;
+gap: 10px;
+margin-bottom: 10px;
+}
+.category-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+#miscCategoryTabs { margin-bottom: 20px; }
+
+.category-tab {
+padding: 8px 16px;
+background: var(--bg-primary);
+border: 2px solid var(--border-color);
+border-radius: 20px;
+cursor: pointer;
+transition: all 0.3s ease;
+font-size: 13px;
+font-weight: 500;
+text-transform: capitalize;
+color: var(--text-secondary);
+}
+.category-tab.active {
+background: var(--accent-primary);
+color: white;
+border-color: var(--accent-primary);
+}
+.category-tab:hover:not(.active) { background: var(--bg-secondary); }
+
+.misc-toggle-button {
+padding: 8px 16px;
+background: var(--bg-secondary);
+color: var(--text-secondary);
+border: none;
+border-radius: 20px;
+cursor: pointer;
+transition: all 0.3s ease;
+font-size: 13px;
+font-weight: 500;
+white-space: nowrap;
+}
+.misc-toggle-button:hover { background: var(--border-color); }
+
+/* Added wrapper for horizontal scrolling on small screens */
+.main-content-wrapper {
+overflow-x: auto;
+padding-bottom: 10px;
+}
+
+.converter-grid {
+display: grid;
+grid-template-columns: 1fr 60px 1fr;
+gap: 16px;
+align-items: end;
+margin-bottom: 24px;
+min-width: 500px; /* Prevents squishing on small screens */
+}
+.input-group { display: flex; flex-direction: column; }
+.input-group label {
+font-weight: 600;
+color: var(--text-secondary);
+margin-bottom: 8px;
+font-size: 14px;
+}
+.input-container { display: flex; flex-direction: column; gap: 8px; }
+
+input[type="number"], select {
+padding: 12px 16px;
+border: 2px solid var(--border-color);
+border-radius: 8px;
+font-size: 16px;
+transition: all 0.3s ease;
+width: 100%;
+background: var(--bg-tertiary);
+color: var(--text-primary);
+}
+input[type="number"]:focus, select:focus {
+outline: none;
+border-color: var(--accent-primary);
+box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 20%, transparent);
+}
+
+.swap-button {
+background: var(--accent-primary);
+border: none;
+border-radius: 50%;
+width: 48px;
+height: 48px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: all 0.3s ease;
+margin: auto;
+margin-top: 24px;
+}
+.swap-button:hover { background: var(--accent-hover); transform: rotate(180deg); }
+.swap-button svg { width: 20px; height: 20px; fill: white; }
+
+.result {
+background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+border: 2px solid var(--border-color);
+border-radius: 12px;
+padding: 20px;
+text-align: center;
+margin-bottom: 24px;
+min-height: 80px;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.result-value { font-size: 24px; font-weight: 700; color: var(--text-primary); word-break: break-all; }
+.result-empty { color: var(--text-tertiary); font-style: italic; }
+
+.error {
+color: var(--error-text);
+background: var(--error-bg);
+padding: 12px 16px;
+border-radius: 8px;
+margin-bottom: 16px;
+font-size: 14px;
+}
+
+.bulk-results {
+max-height: 300px;
+overflow-y: auto;
+border: 2px solid var(--border-color);
+border-radius: 8px;
+margin-top: 16px;
+}
+.bulk-item {
+padding: 12px 16px;
+border-bottom: 1px solid var(--border-color);
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.bulk-item:last-child { border-bottom: none; }
+
+.constant-section {
+padding: 12px 16px;
+border-bottom: 1px solid var(--border-color);
+}
+.constant-section:last-child { border-bottom: none; }
+.constant-section h3 {
+font-size: 15px;
+color: var(--text-primary);
+margin-bottom: 10px;
+}
+.constant-row {
+display: flex;
+justify-content: space-between;
+gap: 12px;
+padding: 8px 0;
+border-bottom: 1px dashed var(--border-color);
+}
+.constant-row:last-child { border-bottom: none; }
+.constant-value {
+font-weight: 600;
+color: var(--text-primary);
+}
+.constant-unit {
+color: var(--text-secondary);
+text-align: right;
+word-break: break-word;
+}
+
+.app-info {
+margin-top: auto;
+padding-top: 20px;
+text-align: center;
+font-size: 12px;
+color: var(--text-secondary);
+border-top: 1px solid var(--bg-secondary);
+}
+.app-info a { color: var(--accent-primary); text-decoration: none; }
+.app-info a:hover { text-decoration: underline; }
+
+/* Modal Styles - Reworked for better responsiveness */
+.modal-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.6);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+opacity: 0;
+visibility: hidden;
+transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.modal-overlay.visible { opacity: 1; visibility: visible; }
+
+.modal-content {
+background: var(--bg-tertiary);
+padding: 24px;
+border-radius: 12px;
+width: 90%;
+max-width: 800px;
+box-shadow: 0 5px 15px var(--shadow-color);
+transform: translateY(-50px);
+transition: transform 0.3s ease;
+display: flex;
+flex-direction: column;
+max-height: 90vh; /* Limit height */
+}
+.modal-overlay.visible .modal-content { transform: translateY(0); }
+
+.modal-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 20px;
+padding-bottom: 10px;
+border-bottom: 1px solid var(--border-color);
+flex-shrink: 0; /* Prevent header from shrinking */
+}
+.modal-header h2 { color: var(--text-primary); font-size: 20px; }
+.close-button { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-secondary); }
+
+/* This new wrapper will contain the grid and be scrollable */
+.modal-body {
+overflow-y: auto;
+}
+
+.modal-grid {
+display: flex;
+flex-wrap: wrap; /* Allows sections to wrap on smaller screens */
+gap: 16px;
+}
+.modal-section {
+border: 1px solid var(--border-color);
+border-radius: 8px;
+padding: 16px;
+flex: 1 1 220px; /* Grow, shrink, and basis for flexible layout */
+min-width: 220px;
+}
+.modal-section h3 { font-size: 16px; color: var(--text-primary); margin-bottom: 12px; }
+
+#calculateFlowButton { width: 100%; margin-top: 16px; }
+
+.modal-result {
+margin-top: 16px;
+padding: 16px;
+background: var(--bg-primary);
+border-radius: 8px;
+text-align: center;
+font-size: 18px;
+font-weight: bold;
+color: var(--accent-primary);
+min-height: 50px;
+word-break: break-all;
+}
+
+@media (max-width: 768px) {
+.container { padding: 16px; margin: 10px; }
+.converter-grid { grid-template-columns: 1fr; gap: 16px; min-width: unset; }
+.swap-button { margin: 0 auto; transform: rotate(90deg); }
+.swap-button:hover { transform: rotate(270deg); }
+.category-tabs { justify-content: center; }
+.result-value { font-size: 20px; }
+.header-controls { justify-content: center; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Chemical Engineers Unit Converter</h1>
+
+<div class="header-controls">
+<div class="theme-switch-wrapper">
+<label class="theme-switch" for="theme-toggle">
+<input type="checkbox" id="theme-toggle" />
+<div class="slider"></div>
+</label>
+<span>Dark Mode</span>
+</div>
+<button id="flowRateEquivButton" class="flow-rate-btn">Flow Rate Equivalence Calculator</button>
+</div>
+
+<div class="category-controls">
+<div class="category-tabs" id="commonCategoryTabs"></div>
+<button id="toggleMiscButton" class="misc-toggle-button">Show Miscellaneous</button>
+</div>
+<div class="category-tabs" id="miscCategoryTabs" style="display: none;"></div>
+
+<div id="errorMessage" class="error" style="display: none;"></div>
+
+<div id="mainContentWrapper" class="main-content-wrapper">
+<div class="converter-grid">
+<div class="input-group">
+<label for="fromValue">From</label>
+<div class="input-container">
+<input type="number" id="fromValue" placeholder="Enter value" step="any">
+<select id="fromUnit"></select>
+</div>
+</div>
+
+<button class="swap-button" id="swapButton" title="Swap units">
+<svg viewBox="0 0 24 24"><path d="M7.41 18.59L8.83 20L12 16.83L15.17 20L16.59 18.59L12 14L7.41 18.59ZM16.59 5.41L15.17 4L12 7.17L8.83 4L7.41 5.41L12 10L16.59 5.41Z"/></svg>
+</button>
+
+<div class="input-group">
+<label for="toValue">To</label>
+<div class="input-container">
+<input type="number" id="toValue" placeholder="Result" readonly>
+<select id="toUnit"></select>
+</div>
+</div>
+</div>
+</div>
+
+<div id="resultBox" class="result">
+<div id="resultDisplay" class="result-empty">Enter a value to see the conversion</div>
+</div>
+
+<div id="gasConstantPanel" class="bulk-results" style="display: none;"></div>
+
+<div id="bulkResults" class="bulk-results" style="display: none;"></div>
+
+<div class="app-info">
+Developed by <a href="https://ir.linkedin.com/in/homayoun-fallahi" target="_blank">Homayoun Fallahi</a> | Version 4.2
+</div>
+</div>
+
+<!-- Flow Rate Equivalence Modal -->
+<div id="flowRateModal" class="modal-overlay">
+<div class="modal-content">
+<div class="modal-header">
+<h2>Flow Rate Equivalence</h2>
+<button id="closeModalButton" class="close-button">&times;</button>
+</div>
+<div class="modal-body">
+<div class="modal-grid">
+<!-- From Section -->
+<div class="modal-section">
+<h3>From</h3>
+<div class="input-group">
+<label for="flowFromType">Flow Type</label>
+<select id="flowFromType">
+<option value="mass_flow_rate">Mass Flow</option>
+<option value="volumetric_flow_rate">Volumetric Flow</option>
+<option value="molar_flow_rate">Molar Flow</option>
+</select>
+</div>
+<div class="input-group" style="margin-top: 8px;">
+<label for="flowFromValue">Value</label>
+<input type="number" id="flowFromValue" placeholder="Enter value">
+</div>
+<div class="input-group" style="margin-top: 8px;">
+<label for="flowFromUnit">Unit</label>
+<select id="flowFromUnit"></select>
+</div>
+</div>
+
+<!-- To Section -->
+<div class="modal-section">
+<h3>To</h3>
+<div class="input-group">
+<label for="flowToType">Flow Type</label>
+<select id="flowToType">
+<option value="mass_flow_rate">Mass Flow</option>
+<option value="volumetric_flow_rate" selected>Volumetric Flow</option>
+<option value="molar_flow_rate">Molar Flow</option>
+</select>
+</div>
+<div class="input-group" style="margin-top: 8px;">
+<label for="flowToUnit">Unit</label>
+<select id="flowToUnit"></select>
+</div>
+</div>
+
+<!-- Additional Info Section -->
+<div id="densitySection" class="modal-section" style="display: none;">
+<h3>Required: Density (ρ)</h3>
+<div class="input-group">
+<label for="densityValue">Value</label>
+<input type="number" id="densityValue" placeholder="e.g., 997 for water">
+</div>
+<div class="input-group" style="margin-top: 8px;">
+<label for="densityUnit">Unit</label>
+<select id="densityUnit"></select>
+</div>
+</div>
+<div id="molarMassSection" class="modal-section" style="display: none;">
+<h3>Required: Molar Mass (MW)</h3>
+<div class="input-group">
+<label for="molarMassValue">Value</label>
+<input type="number" id="molarMassValue" placeholder="e.g., 18.015 for water">
+</div>
+<div class="input-group" style="margin-top: 8px;">
+<label for="molarMassUnit">Unit</label>
+<select id="molarMassUnit"></select>
+</div>
+</div>
+</div>
+<button id="calculateFlowButton" class="flow-rate-btn">Calculate</button>
+<div id="flowResult" class="modal-result">Result will be shown here</div>
+</div>
+</div>
+</div>
+
+<script>
+// --- UTILITY FUNCTIONS ---
+function formatNumber(num, precision = 10) {
+if (num === null || num === undefined) return "";
+if (num === 0) return '0';
+const absNum = Math.abs(num);
+if (absNum >= 1e10 || (absNum > 0 && absNum < 1e-4)) {
+return num.toExponential(precision - 4);
+}
+return parseFloat(num.toPrecision(precision)).toString();
+}
+
+function formatUnitHTML(unit) {
+if (!unit) return '';
+return unit
+.replace(/²/g, '<sup>2</sup>')
+.replace(/³/g, '<sup>3</sup>')
+.replace(/_/g, ' ');
+}
+
+class UnitConverter {
+constructor() {
+this.precision = 15;
+this.standardAtmospherePa = 101325;
+
+// Base units are SI. Conversion factors convert from the unit to the SI base.
+this.length_units = { 'km': 1000, 'm': 1, 'cm': 0.01, 'mm': 0.001, 'mi': 1609.344, 'yd': 0.9144, 'ft': 0.3048, 'in': 0.0254, 'nmi': 1852, 'ly': 9460730472580800 };
+this.weight_units = { 'tonne': 1000, 'kg': 1, 'g': 0.001, 'mg': 1e-6, 'st': 6.35029318, 'lb': 0.45359237, 'oz': 0.0283495231 };
+this.temperature_units = ['kelvin', 'celsius', 'rankine', 'fahrenheit'];
+this.volume_units = { 'm³': 1, 'l': 0.001, 'ml': 1e-6, 'cm³': 1e-6, 'gal': 0.00378541, 'qt': 0.000946353, 'pt': 0.000473176, 'cup': 0.000236588, 'ft³': 0.0283168, 'fl_oz': 2.95735e-5, 'in³': 1.63871e-5 };
+this.area_units = { 'km²': 1e6, 'ha': 10000, 'm²': 1, 'cm²': 1e-4, 'mm²': 1e-6, 'mi²': 2.59e6, 'ac': 4046.86, 'yd²': 0.836127, 'ft²': 0.092903, 'in²': 0.00064516 };
+this.time_units = { 'year': 31556952, 'month': 2629746, 'week': 604800, 'day': 86400, 'h': 3600, 'min': 60, 's': 1, 'ms': 0.001 };
+this.speed_units = { 'mach': 343, 'km/h': 1/3.6, 'm/s': 1, 'mph': 0.44704, 'knot': 0.514444, 'ft/s': 0.3048 };
+this.pressure_units = { 
+    'MPa': 1e6, 'bar': 100000, 'kPa': 1000, 'Pa': 1, 'mbar': 100,
+    'bar-g': 100000, 'kPa-g': 1000, 'Pa-g': 1, 'mbar-g': 100,
+    'psi-g': 6894.76, 'psi': 6894.76, 
+    'atm': 101325, 'torr': 133.322, 
+    'inHg': 3386.389, 'inH2O': 248.843 
+};
+this.energy_units = { 'MJ': 1e6, 'kJ': 1000, 'J': 1, 'kcal': 4184, 'cal': 4.184, 'btu': 1055.06 };
+this.duty_units = { 
+    'MW': 1e6, 'kW': 1000, 'W': 1, 'hp': 745.7, 
+    'btu/s': 1055.06, 'btu/min': 17.5843, 'btu/h': 0.293071, 
+    'kcal/h': 1.163, 'kJ/h': 1000/3600, 'MJ/h': 1000000/3600 
+};
+this.force_units = { 'MN': 1e6, 'kN': 1000, 'N': 1, 'dyn': 1e-5, 'kgf': 9.80665, 'lbf': 4.44822 };
+this.torque_units = { 'N·m': 1, 'dyne·cm': 1e-7, 'kgf·m': 9.80665, 'lbf·ft': 1.35582 };
+this.acceleration_units = { 'g': 9.80665, 'm/s²': 1, 'gal': 0.01, 'km/h²': 7.71605e-5, 'ft/s²': 0.3048 };
+this.angular_speed_units = { 'rps': 2 * Math.PI, 'rpm': Math.PI / 30, 'rad/s': 1, 'deg/s': Math.PI / 180 };
+this.volumetric_flow_rate_units = { 
+    'm³/s': 1, 'm³/min': 0.0166667, 'm³/h': 1 / 3600, 
+    'l/s': 0.001, 'l/min': 1.6667e-5, 'l/h': 2.7778e-7, 
+    'ft³/s': 0.0283168, 'gal/s': 0.00378541, 'gal/min': 6.309e-5, 'ft³/min': 4.7195e-4, 
+    'in³/s': 1.6387e-5, 'gal/h': 1.0515e-6, 'gal/day': 4.3813e-8, 
+    'ft³/h': 7.8658e-6, 'bbl/day': 1.8401e-6, 'bbl/h': 4.4163e-5 
+};
+this.mass_flow_rate_units = { 'ton/h': 0.277778, 'kg/s': 1, 'kg/min': 1/60, 'kg/h': 1/3600, 'g/s': 0.001, 'slug/s': 14.5939, 'lb/s': 0.453592, 'lb/min': 0.00755987, 'lb/h': 0.000125998 };
+this.molar_flow_rate_units = { 
+    'kmol/s': 1000, 'kmol/min': 16.6667, 'kmol/h': 0.277778, 
+    'mol/s': 1, 'mol/min': 0.0166667, 'mol/h': 0.000277778, 
+    'lbmol/s': 453.592, 'lbmol/min': 7.55987, 'lbmol/h': 0.125998 
+};
+this.molar_mass_units = { 'kg/kmol': 1, 'g/mol': 1, 'lb/lbmol': 1 };
+this.frequency_units = { 'GHz': 1e9, 'MHz': 1e6, 'kHz': 1000, 'Hz': 1, 'rps_freq': 1, 'rpm_freq': 1/60 };
+this.density_units = { 'g/cm³': 1000, 'kg/m³': 1, 'lb/in³': 27679.9, 'lb/ft³': 16.0185 };
+this.dynamic_viscosity_units = { 
+    'Pa·s': 1, 'mPa·s': 0.001, 'poise': 0.1, 'cpoise': 0.001, 
+    'lb/(ft·s)': 1.48816, 'lb/(ft·h)': 0.000413379, 
+    'slug/(ft·s)': 47.8803, 'lbf·s/ft²': 47.8803 
+};
+this.kinematic_viscosity_units = { 
+    'm²/s': 1, 'Stokes': 0.0001, 'cStokes': 1e-6, 'cm²/s': 0.0001, 
+    'ft²/s': 0.092903, 'ft²/h': 2.58064e-5, 'in²/s': 0.00064516 
+};
+this.specific_heat_capacity_units = { 
+    'J/(kg·K)': 1, 'kJ/(kg·K)': 1000, 'cal/(g·°C)': 4184, 'Btu/(lb·°F)': 4186.8 
+};
+this.thermal_conductivity_units = { 
+    'W/(m·K)': 1, 'kW/(m·K)': 1000, 'Btu/(h·ft·°F)': 1.73073 
+};
+this.heat_transfer_coefficient_units = { 
+    'W/m²·K': 1, 'kW/m²·K': 1000, 'MW/m²·K': 1e6, 
+    'btu/s·ft²·°F': 20441.75, 'btu/h·ft²·°F': 5.67826, 
+    'kcal/s·m²·°C': 4186.8, 'kcal/h·m²·°C': 1.16222 
+};
+
+// CORRECTED: Mass Concentration Units
+// Base: kg/m³
+this.mass_concentration_units = {
+    'kg/m³': 1,
+    'g/L': 1,
+    'g/cm³': 1000,
+    'mg/L': 0.001,        // Corrected from 0.000001
+    'ppm (mg/L)': 0.001,  // Corrected from 0.000001
+    'ppb (μg/L)': 0.000001, // Corrected from 0.000000001
+    'lb/ft³': 16.0185,
+    'lb/gal (US)': 119.826
+};
+
+// Molar Concentration Units
+// Base: kmol/m³
+this.molar_concentration_units = {
+    'kmol/m³': 1,
+    'mol/m³': 0.001,
+    'M (mol/L)': 1, 
+    'mmol/L': 0.001,
+    'μmol/L': 0.000001,
+    'mol/cm³': 1000
+};
+
+this.electric_charge_units = { 'faraday': 96485.3, 'C': 1, 'mC': 1e-3, 'μC': 1e-6, 'nC': 1e-9, 'e': 1.60218e-19 };
+this.electric_resistance_units = { 'GΩ': 1e9, 'MΩ': 1e6, 'kΩ': 1000, 'Ω': 1, 'milliΩ': 1e-3, 'microΩ': 1e-6 };
+this.electric_potential_units = { 'kV': 1000, 'V': 1, 'mV': 1e-3, 'uV': 1e-6 };
+this.electric_capacitance_units = { 'F': 1, 'mF': 1e-3, 'μF': 1e-6, 'nF': 1e-9, 'pF': 1e-12 };
+this.luminance_units = { 'stilb': 10000, 'lambert': 3183.1, 'cd/m²': 1, 'nit': 1, 'foot_lambert': 3.42626 };
+this.magnetic_field_units = { 'T': 1, 'mT': 1e-3, 'μT': 1e-6, 'gauss': 1e-4 };
+this.angle_units = { 'turn': 2 * Math.PI, 'rad': 1, 'grad': Math.PI / 200, 'deg': Math.PI / 180, 'arcmin': Math.PI / 10800, 'arcsec': Math.PI / 648000 };
+
+this.categories = {
+'length': this.length_units, 'weight': this.weight_units, 'volume': this.volume_units, 'area': this.area_units, 'time': this.time_units, 'speed': this.speed_units,
+'pressure': this.pressure_units, 'energy': this.energy_units, 'duty': this.duty_units, 'force': this.force_units, 'torque': this.torque_units, 'acceleration': this.acceleration_units,
+'angular_speed': this.angular_speed_units, 'volumetric_flow_rate': this.volumetric_flow_rate_units, 'mass_flow_rate': this.mass_flow_rate_units, 'molar_flow_rate': this.molar_flow_rate_units,
+'molar_mass': this.molar_mass_units, 'frequency': this.frequency_units, 'density': this.density_units, 'dynamic_viscosity': this.dynamic_viscosity_units, 'kinematic_viscosity': this.kinematic_viscosity_units,
+'electric_charge': this.electric_charge_units, 'electric_resistance': this.electric_resistance_units, 'electric_potential': this.electric_potential_units, 'electric_capacitance': this.electric_capacitance_units,
+'luminance': this.luminance_units, 'magnetic_field': this.magnetic_field_units, 'angle': this.angle_units, 'heat_transfer_coefficient': this.heat_transfer_coefficient_units,
+'specific_heat_capacity': this.specific_heat_capacity_units, 'thermal_conductivity': this.thermal_conductivity_units, 
+'molar_concentration': this.molar_concentration_units, 'mass_concentration': this.mass_concentration_units
+};
+}
+
+getAvailableCategories() { return Object.keys(this.categories).concat(['temperature']); }
+getUnitsForCategory(category) { return category === 'temperature' ? this.temperature_units : Object.keys(this.categories[category] || {}); }
+
+findUnitCategory(unit) {
+if (this.temperature_units.includes(unit.toLowerCase())) return 'temperature';
+for (const [category, units] of Object.entries(this.categories)) {
+if (unit in units) return category;
+}
+return null;
+}
+
+convert(value, fromUnit, toUnit, preferredCategory = null) {
+const fromCategory = preferredCategory || this.findUnitCategory(fromUnit);
+const toCategory = preferredCategory || this.findUnitCategory(toUnit);
+
+if (!fromCategory || !toCategory) throw new Error(`Unknown unit.`);
+if (fromCategory !== toCategory) throw new Error(`Cannot convert between categories.`);
+
+if (fromCategory === 'temperature') return { value: this.convertTemperature(value, fromUnit, toUnit) };
+if (fromCategory === 'pressure') return { value: this.convertPressure(value, fromUnit, toUnit) };
+
+const unitsDict = this.categories[fromCategory];
+if (!unitsDict || !(fromUnit in unitsDict) || !(toUnit in unitsDict)) {
+throw new Error(`Unit does not belong to selected category.`);
+}
+
+return { value: value * unitsDict[fromUnit] / unitsDict[toUnit] };
+}
+
+convertFlowRate({ fromType, fromValue, fromUnit, toType, toUnit, densityValue, densityUnit, molarMassValue, molarMassUnit }) {
+const fromValueSI = fromValue * this.categories[fromType][fromUnit];
+let densitySI = densityValue ? densityValue * this.categories['density'][densityUnit] : null;
+let molarMassSI = molarMassValue ? molarMassValue * this.categories['molar_mass'][molarMassUnit] : null;
+
+if (molarMassSI) molarMassSI /= 1000; // Convert kg/kmol (or g/mol) to kg/mol for calculations
+
+let massFlowSI;
+if (fromType === 'mass_flow_rate') {
+massFlowSI = fromValueSI;
+} else if (fromType === 'volumetric_flow_rate') {
+if (!densitySI) throw new Error("Density is required.");
+massFlowSI = fromValueSI * densitySI;
+} else if (fromType === 'molar_flow_rate') {
+if (!molarMassSI) throw new Error("Molar Mass is required.");
+massFlowSI = fromValueSI * molarMassSI;
+} else {
+throw new Error("Invalid 'from' flow type.");
+}
+
+let toValueSI;
+if (toType === 'mass_flow_rate') {
+toValueSI = massFlowSI;
+} else if (toType === 'volumetric_flow_rate') {
+if (!densitySI || densitySI === 0) throw new Error("Valid density is required.");
+toValueSI = massFlowSI / densitySI;
+} else if (toType === 'molar_flow_rate') {
+if (!molarMassSI || molarMassSI === 0) throw new Error("Valid molar mass is required.");
+toValueSI = massFlowSI / molarMassSI;
+} else {
+throw new Error("Invalid 'to' flow type.");
+}
+
+return toValueSI / this.categories[toType][toUnit];
+}
+
+convertTemperature(value, fromUnit, toUnit) {
+let celsius;
+switch (fromUnit.toLowerCase()) {
+case 'fahrenheit': celsius = (value - 32) * 5 / 9; break;
+case 'kelvin': celsius = value - 273.15; break;
+case 'rankine': celsius = (value - 491.67) * 5 / 9; break;
+default: celsius = value;
+}
+switch (toUnit.toLowerCase()) {
+case 'celsius': return celsius;
+case 'fahrenheit': return celsius * 9 / 5 + 32;
+case 'kelvin': return celsius + 273.15;
+case 'rankine': return (celsius + 273.15) * 9 / 5;
+default: throw new Error(`Unknown temperature unit: ${toUnit}`);
+}
+}
+
+convertPressure(value, fromUnit, toUnit) {
+const unitsDict = this.categories['pressure'];
+const fromIsGauge = fromUnit.endsWith('-g');
+const fromBaseUnit = fromIsGauge ? fromUnit.slice(0, -2) : fromUnit;
+let valueInPascals = value * unitsDict[fromBaseUnit];
+if (fromIsGauge) valueInPascals += this.standardAtmospherePa;
+
+const toIsGauge = toUnit.endsWith('-g');
+const toBaseUnit = toIsGauge ? toUnit.slice(0, -2) : toUnit;
+if (toIsGauge) {
+return (valueInPascals - this.standardAtmospherePa) / unitsDict[toBaseUnit];
+}
+return valueInPascals / unitsDict[toBaseUnit];
+}
+
+bulkConvert(value, fromUnit, preferredCategory = null) {
+const fromCategory = preferredCategory || this.findUnitCategory(fromUnit);
+if (!fromCategory) return {};
+const results = {};
+for (const unit of this.getUnitsForCategory(fromCategory)) {
+try { results[unit] = this.convert(value, fromUnit, unit, fromCategory).value; } catch (e) { /* skip */ }
+}
+return results;
+}
+}
+
+class ConverterUI {
+constructor() {
+this.converter = new UnitConverter();
+this.gasConstantValues = {
+si: [
+{ value: '8.31446261815324', unit: 'J⋅K−1⋅mol−1' },
+{ value: '8.31446261815324', unit: 'm³⋅Pa⋅K−1⋅mol−1' },
+{ value: '8.31446261815324', unit: 'kg⋅m²⋅s−2⋅K−1⋅mol−1' }
+],
+other: [
+{ value: '8314.46261815324', unit: 'L⋅Pa⋅K−1⋅mol−1' },
+{ value: '8.31446261815324', unit: 'L⋅kPa⋅K−1⋅mol−1' },
+{ value: '0.0831446261815324', unit: 'L⋅bar⋅K−1⋅mol−1' },
+{ value: '8.31446261815324 × 10^7', unit: 'erg⋅K−1⋅mol−1' },
+{ value: '0.730240507295273', unit: 'atm⋅ft³⋅lbmol−1⋅°R−1' },
+{ value: '10.731577089016', unit: 'psi⋅ft³⋅lbmol−1⋅°R−1' },
+{ value: '1.985875279009', unit: 'BTU⋅lbmol−1⋅°R−1' },
+{ value: '297.031214', unit: 'inH2O⋅ft³⋅lbmol−1⋅°R−1' },
+{ value: '554.984319180', unit: 'torr⋅ft³⋅lbmol−1⋅°R−1' },
+{ value: '0.082057366080960', unit: 'L⋅atm⋅K−1⋅mol−1' },
+{ value: '62.363598221529', unit: 'L⋅torr⋅K−1⋅mol−1' },
+{ value: '1.98720425864083', unit: 'cal⋅K−1⋅mol−1' },
+{ value: '8.20573660809596 × 10−5', unit: 'm³⋅atm⋅K−1⋅mol−1' }
+]
+};
+this.commonCategories = [
+'area', 'density', 'duty', 'dynamic_viscosity', 'energy', 'heat_transfer_coefficient',
+'kinematic_viscosity', 'length', 'mass_concentration', 'mass_flow_rate', 'molar_concentration', 
+'molar_flow_rate', 'pressure', 'speed', 'specific_heat_capacity', 'temperature', 
+'thermal_conductivity', 'volume', 'volumetric_flow_rate', 'weight',
+'gas_constant',
+].sort();
+
+this.miscellaneousCategories = [
+'acceleration', 'angle', 'angular_speed', 'electric_capacitance', 'electric_charge',
+'electric_potential', 'electric_resistance', 'force', 'frequency', 'luminance',
+'magnetic_field', 'time', 'torque'
+].sort();
+
+this.currentCategory = this.commonCategories[0];
+
+this.initializeElements();
+this.setupEventListeners();
+this.initializeUI();
+}
+
+initializeElements() {
+// Main UI
+this.themeToggle = document.getElementById('theme-toggle');
+this.commonCategoryTabs = document.getElementById('commonCategoryTabs');
+this.miscCategoryTabs = document.getElementById('miscCategoryTabs');
+this.toggleMiscButton = document.getElementById('toggleMiscButton');
+this.errorMessage = document.getElementById('errorMessage');
+this.fromValue = document.getElementById('fromValue');
+this.fromUnit = document.getElementById('fromUnit');
+this.toValue = document.getElementById('toValue');
+this.toUnit = document.getElementById('toUnit');
+this.swapButton = document.getElementById('swapButton');
+this.resultDisplay = document.getElementById('resultDisplay');
+this.bulkResults = document.getElementById('bulkResults');
+this.resultBox = document.getElementById('resultBox');
+this.mainContentWrapper = document.getElementById('mainContentWrapper');
+this.gasConstantPanel = document.getElementById('gasConstantPanel');
+
+// Modal
+this.flowRateModal = document.getElementById('flowRateModal');
+this.flowRateEquivButton = document.getElementById('flowRateEquivButton');
+this.closeModalButton = document.getElementById('closeModalButton');
+this.flowFromType = document.getElementById('flowFromType');
+this.flowToType = document.getElementById('flowToType');
+this.flowFromUnit = document.getElementById('flowFromUnit');
+this.flowToUnit = document.getElementById('flowToUnit');
+this.densitySection = document.getElementById('densitySection');
+this.molarMassSection = document.getElementById('molarMassSection');
+this.densityUnit = document.getElementById('densityUnit');
+this.molarMassUnit = document.getElementById('molarMassUnit');
+this.calculateFlowButton = document.getElementById('calculateFlowButton');
+this.flowResult = document.getElementById('flowResult');
+}
+
+setupEventListeners() {
+this.themeToggle.addEventListener('change', () => this.toggleTheme());
+this.fromValue.addEventListener('input', () => this.performConversion());
+this.fromUnit.addEventListener('change', () => this.performConversion());
+this.toUnit.addEventListener('change', () => this.performConversion());
+this.swapButton.addEventListener('click', () => this.swapUnits());
+this.toggleMiscButton.addEventListener('click', () => this.toggleMiscCategories());
+
+// Modal Listeners
+this.flowRateEquivButton.addEventListener('click', () => this.openModal());
+this.closeModalButton.addEventListener('click', () => this.closeModal());
+this.flowRateModal.addEventListener('click', (e) => { if (e.target === this.flowRateModal) this.closeModal(); });
+this.flowFromType.addEventListener('change', () => this.updateModalUI());
+this.flowToType.addEventListener('change', () => this.updateModalUI());
+this.calculateFlowButton.addEventListener('click', () => this.performFlowConversion());
+}
+
+initializeUI() {
+// Set initial theme based on user preference or system setting
+if (localStorage.getItem('theme') === 'dark' || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches && !localStorage.getItem('theme'))) {
+document.body.classList.add('dark-mode');
+this.themeToggle.checked = true;
+}
+this.createCategoryTabs();
+this.updateUnitsForCategory(this.currentCategory);
+this.updateCategoryMode(this.currentCategory);
+this.updateModalUI();
+}
+
+renderGasConstantValues() {
+const renderSection = (title, rows) => {
+const section = document.createElement('div');
+section.className = 'constant-section';
+
+const heading = document.createElement('h3');
+heading.textContent = title;
+section.appendChild(heading);
+
+rows.forEach((row) => {
+const item = document.createElement('div');
+item.className = 'constant-row';
+item.innerHTML = `<span class="constant-value">${row.value}</span><span class="constant-unit">${formatUnitHTML(row.unit)}</span>`;
+section.appendChild(item);
+});
+
+return section;
+};
+
+this.gasConstantPanel.innerHTML = '';
+this.gasConstantPanel.appendChild(renderSection('SI units', this.gasConstantValues.si));
+this.gasConstantPanel.appendChild(renderSection('Other common units', this.gasConstantValues.other));
+}
+
+updateCategoryMode(category) {
+const isGasConstant = category === 'gas_constant';
+this.mainContentWrapper.style.display = isGasConstant ? 'none' : 'block';
+this.resultBox.style.display = isGasConstant ? 'none' : 'flex';
+
+if (isGasConstant) {
+this.hideError();
+this.hideBulkResults();
+this.gasConstantPanel.style.display = 'block';
+this.renderGasConstantValues();
+} else {
+this.gasConstantPanel.style.display = 'none';
+}
+}
+
+toggleTheme() {
+document.body.classList.toggle('dark-mode');
+localStorage.setItem('theme', this.themeToggle.checked ? 'dark' : 'light');
+}
+
+openModal() { this.flowRateModal.classList.add('visible'); }
+closeModal() { this.flowRateModal.classList.remove('visible'); }
+
+updateModalUI() {
+const from = this.flowFromType.value;
+const to = this.flowToType.value;
+
+this.populateSelect(this.flowFromUnit, this.converter.getUnitsForCategory(from));
+this.populateSelect(this.flowToUnit, this.converter.getUnitsForCategory(to));
+this.populateSelect(this.densityUnit, this.converter.getUnitsForCategory('density'));
+this.populateSelect(this.molarMassUnit, this.converter.getUnitsForCategory('molar_mass'));
+
+const needsDensity = (from.includes('volumetric') && !to.includes('volumetric')) || (!from.includes('volumetric') && to.includes('volumetric'));
+const needsMolarMass = (from.includes('molar') && !to.includes('molar')) || (!from.includes('molar') && to.includes('molar'));
+
+this.densitySection.style.display = needsDensity ? 'block' : 'none';
+this.molarMassSection.style.display = needsMolarMass ? 'block' : 'none';
+}
+
+performFlowConversion() {
+try {
+const params = {
+fromType: this.flowFromType.value,
+fromValue: parseFloat(document.getElementById('flowFromValue').value),
+fromUnit: this.flowFromUnit.value,
+toType: this.flowToType.value,
+toUnit: this.flowToUnit.value,
+densityValue: parseFloat(document.getElementById('densityValue').value),
+densityUnit: this.densityUnit.value,
+molarMassValue: parseFloat(document.getElementById('molarMassValue').value),
+molarMassUnit: this.molarMassUnit.value,
+};
+
+if (isNaN(params.fromValue)) throw new Error("Please enter a valid 'From' value.");
+const result = this.converter.convertFlowRate(params);
+this.flowResult.innerHTML = `${formatNumber(result)} ${formatUnitHTML(params.toUnit)}`;
+} catch (error) {
+this.flowResult.textContent = `Error: ${error.message}`;
+}
+}
+
+createCategoryTabs() {
+const createTabs = (container, categories) => {
+container.innerHTML = '';
+categories.forEach(category => {
+const tab = document.createElement('div');
+tab.className = `category-tab ${category === this.currentCategory ? 'active' : ''}`;
+tab.innerHTML = formatUnitHTML(category.replace(/_/g, ' '));
+tab.dataset.category = category;
+tab.addEventListener('click', () => this.switchCategory(category));
+container.appendChild(tab);
+});
+};
+createTabs(this.commonCategoryTabs, this.commonCategories);
+createTabs(this.miscCategoryTabs, this.miscellaneousCategories);
+}
+
+toggleMiscCategories() {
+const isHidden = this.miscCategoryTabs.style.display === 'none';
+this.miscCategoryTabs.style.display = isHidden ? 'flex' : 'none';
+this.toggleMiscButton.textContent = isHidden ? 'Hide Miscellaneous' : 'Show Miscellaneous';
+}
+
+switchCategory(category) {
+this.currentCategory = category;
+this.updateCategoryMode(category);
+this.updateUnitsForCategory(category);
+this.createCategoryTabs();
+if (category !== 'gas_constant') {
+this.performConversion();
+}
+}
+
+populateSelect(selectElement, units) {
+const currentVal = selectElement.value;
+selectElement.innerHTML = '';
+units.forEach(unit => {
+const option = document.createElement('option');
+option.value = unit;
+option.innerHTML = formatUnitHTML(unit);
+selectElement.appendChild(option);
+});
+if ([...selectElement.options].some(o => o.value === currentVal)) {
+selectElement.value = currentVal;
+}
+}
+
+updateUnitsForCategory(category) {
+if (category === 'gas_constant') return;
+const units = this.converter.getUnitsForCategory(category);
+this.populateSelect(this.fromUnit, units);
+this.populateSelect(this.toUnit, units);
+if (units.length > 1) {
+this.toUnit.selectedIndex = (this.fromUnit.selectedIndex === 0) ? 1 : 0;
+}
+}
+
+performConversion() {
+if (this.currentCategory === 'gas_constant') return;
+this.hideError();
+const value = parseFloat(this.fromValue.value);
+if (isNaN(value) || this.fromValue.value === '') {
+this.resultDisplay.textContent = 'Enter a value to see the conversion';
+this.resultDisplay.className = 'result-empty';
+this.toValue.value = '';
+this.hideBulkResults();
+return;
+}
+
+try {
+const fromUnit = this.fromUnit.value;
+const toUnit = this.toUnit.value;
+const result = this.converter.convert(value, fromUnit, toUnit, this.currentCategory);
+const formattedResult = formatNumber(result.value);
+this.toValue.value = formattedResult;
+
+this.resultDisplay.innerHTML = `<div class="result-value">${formatNumber(value)} ${formatUnitHTML(fromUnit)} = ${formattedResult} ${formatUnitHTML(toUnit)}</div>`;
+this.resultDisplay.className = '';
+this.displayBulkResults(value, fromUnit);
+} catch (error) {
+this.showError(error.message);
+this.toValue.value = '';
+this.resultDisplay.textContent = 'Conversion error';
+this.resultDisplay.className = 'result-empty';
+this.hideBulkResults();
+}
+}
+
+swapUnits() {
+if (this.currentCategory === 'gas_constant') return;
+const fromUnitValue = this.fromUnit.value;
+this.fromUnit.value = this.toUnit.value;
+this.toUnit.value = fromUnitValue;
+this.fromValue.value = this.toValue.value;
+this.performConversion();
+}
+
+displayBulkResults(value, fromUnit) {
+if (this.currentCategory === 'gas_constant') { this.hideBulkResults(); return; }
+try {
+const results = this.converter.bulkConvert(value, fromUnit, this.currentCategory);
+if(Object.keys(results).length <= 1) { this.hideBulkResults(); return; }
+this.bulkResults.innerHTML = '';
+const sortedUnitKeys = this.converter.getUnitsForCategory(this.currentCategory);
+sortedUnitKeys.forEach(unit => {
+if (unit.toLowerCase() !== fromUnit.toLowerCase()) {
+const result = results[unit];
+if(result === undefined) return;
+const item = document.createElement('div');
+item.className = 'bulk-item';
+item.innerHTML = `<span class="bulk-unit">${formatUnitHTML(unit)}</span><span class="bulk-value">${formatNumber(result)}</span>`;
+this.bulkResults.appendChild(item);
+}
+});
+this.bulkResults.style.display = 'block';
+} catch (error) { this.hideBulkResults(); }
+}
+
+hideBulkResults() { this.bulkResults.style.display = 'none'; }
+showError(message) { this.errorMessage.textContent = message; this.errorMessage.style.display = 'block'; }
+hideError() { this.errorMessage.style.display = 'none'; }
+}
+
+document.addEventListener('DOMContentLoaded', () => { new ConverterUI(); });
+</script>
+</body>
+</html>
