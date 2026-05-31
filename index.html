@@ -157,11 +157,16 @@ flex-wrap: wrap;
 gap: 10px;
 margin-bottom: 10px;
 }
-.category-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.category-tabs {
+display: grid;
+grid-template-columns: repeat(4, minmax(0, 1fr));
+gap: 8px;
+width: 100%;
+}
 #miscCategoryTabs { margin-bottom: 20px; }
 
 .category-tab {
-padding: 8px 16px;
+padding: 10px 14px;
 background: var(--bg-primary);
 border: 2px solid var(--border-color);
 border-radius: 20px;
@@ -171,6 +176,9 @@ font-size: 13px;
 font-weight: 500;
 text-transform: capitalize;
 color: var(--text-secondary);
+width: 100%;
+text-align: center;
+white-space: nowrap;
 }
 .category-tab.active {
 background: var(--accent-primary);
@@ -263,6 +271,13 @@ justify-content: center;
 }
 .result-value { font-size: 24px; font-weight: 700; color: var(--text-primary); word-break: break-all; }
 .result-empty { color: var(--text-tertiary); font-style: italic; }
+.conversion-factor {
+text-align: center;
+margin-top: -14px;
+margin-bottom: 16px;
+font-size: 13px;
+color: var(--text-secondary);
+}
 
 .error {
 color: var(--error-text);
@@ -412,7 +427,7 @@ word-break: break-all;
 .converter-grid { grid-template-columns: 1fr; gap: 16px; min-width: unset; }
 .swap-button { margin: 0 auto; transform: rotate(90deg); }
 .swap-button:hover { transform: rotate(270deg); }
-.category-tabs { justify-content: center; }
+.category-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .result-value { font-size: 20px; }
 .header-controls { justify-content: center; }
 }
@@ -468,6 +483,7 @@ word-break: break-all;
 <div id="resultBox" class="result">
 <div id="resultDisplay" class="result-empty">Enter a value to see the conversion</div>
 </div>
+<div id="conversionFactor" class="conversion-factor"></div>
 
 <div id="gasConstantPanel" class="bulk-results" style="display: none;"></div>
 
@@ -853,6 +869,7 @@ this.toValue = document.getElementById('toValue');
 this.toUnit = document.getElementById('toUnit');
 this.swapButton = document.getElementById('swapButton');
 this.resultDisplay = document.getElementById('resultDisplay');
+this.conversionFactor = document.getElementById('conversionFactor');
 this.bulkResults = document.getElementById('bulkResults');
 this.resultBox = document.getElementById('resultBox');
 this.mainContentWrapper = document.getElementById('mainContentWrapper');
@@ -931,8 +948,10 @@ updateCategoryMode(category) {
 const isGasConstant = category === 'gas_constant';
 this.mainContentWrapper.style.display = isGasConstant ? 'none' : 'block';
 this.resultBox.style.display = isGasConstant ? 'none' : 'flex';
+this.conversionFactor.style.display = isGasConstant ? 'none' : 'block';
 
 if (isGasConstant) {
+this.conversionFactor.textContent = '';
 this.hideError();
 this.hideBulkResults();
 this.gasConstantPanel.style.display = 'block';
@@ -1006,7 +1025,7 @@ createTabs(this.miscCategoryTabs, this.miscellaneousCategories);
 
 toggleMiscCategories() {
 const isHidden = this.miscCategoryTabs.style.display === 'none';
-this.miscCategoryTabs.style.display = isHidden ? 'flex' : 'none';
+this.miscCategoryTabs.style.display = isHidden ? 'grid' : 'none';
 this.toggleMiscButton.textContent = isHidden ? 'Hide Miscellaneous' : 'Show Miscellaneous';
 }
 
@@ -1047,6 +1066,7 @@ this.toUnit.selectedIndex = (this.fromUnit.selectedIndex === 0) ? 1 : 0;
 performConversion() {
 if (this.currentCategory === 'gas_constant') return;
 this.hideError();
+this.updateConversionFactor();
 const value = parseFloat(this.fromValue.value);
 if (isNaN(value) || this.fromValue.value === '') {
 this.resultDisplay.textContent = 'Enter a value to see the conversion';
@@ -1075,12 +1095,27 @@ this.hideBulkResults();
 }
 }
 
+updateConversionFactor() {
+const fromUnit = this.fromUnit.value;
+const toUnit = this.toUnit.value;
+if (!fromUnit || !toUnit) {
+this.conversionFactor.textContent = '';
+return;
+}
+
+try {
+const factor = this.converter.convert(1, fromUnit, toUnit, this.currentCategory).value;
+this.conversionFactor.innerHTML = `Conversion factor: 1 ${formatUnitHTML(fromUnit)} = ${formatNumber(factor)} ${formatUnitHTML(toUnit)}`;
+} catch (error) {
+this.conversionFactor.textContent = '';
+}
+}
+
 swapUnits() {
 if (this.currentCategory === 'gas_constant') return;
 const fromUnitValue = this.fromUnit.value;
 this.fromUnit.value = this.toUnit.value;
 this.toUnit.value = fromUnitValue;
-this.fromValue.value = this.toValue.value;
 this.performConversion();
 }
 
