@@ -11,9 +11,11 @@ You don’t need to install anything—just **download the HTML file** and open 
 🔗 **[WebApp](https://homayounfallahi.github.io/Chemical-Engineers-Unit-Converter/)**
 
 <div align="center">
+
+  <img src="/Images/dark.png" alt="Dark Mode" width="90%"/>
   <img src="/Images/light.png" alt="Light Mode" width="45%"/>
   <img src="/Images/FlowRateEquivalence.png" alt="Miniapp Mode" width="45%"/>
-  <img src="/Images/dark.png" alt="Dark Mode" width="90%"/>
+
 </div>
 
 ## ✨ Features
