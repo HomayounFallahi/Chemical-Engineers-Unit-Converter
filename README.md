@@ -1,4 +1,4 @@
-<img width="1231" height="894" alt="image" src="https://github.com/user-attachments/assets/9cea2122-510b-44b3-9db7-20f938b3cbc0" /># Chemical Engineers Unit Converter
+# Chemical Engineers Unit Converter
 A fast, **offline**, zero-dependency unit converter focused on chemical &amp; process engineering. **No installation required** — just open html file in your browser.
 
 ---
