@@ -1,4 +1,4 @@
-# Chemical Engineers Unit Converter
+<img width="1231" height="894" alt="image" src="https://github.com/user-attachments/assets/9cea2122-510b-44b3-9db7-20f938b3cbc0" /># Chemical Engineers Unit Converter
 A fast, **offline**, zero-dependency unit converter focused on chemical &amp; process engineering. **No installation required** — just open html file in your browser.
 
 ---
@@ -12,9 +12,10 @@ You don’t need to install anything—just **download the HTML file** and open 
 
 <div align="center">
 
-  <img src="/Images/dark.png" alt="Dark Mode" width="90%"/>
-  <img src="/Images/light.png" alt="Light Mode" width="45%"/>
-  <img src="/Images/FlowRateEquivalence.png" alt="Miniapp Mode" width="45%"/>
+  <img src="/images/1.png" alt="" width="45%"/>
+  <img src="/images/2.png" alt="" width="45%"/>
+  <img src="/images/3.png" alt="" width="45%"/>
+  <img src="/images/4.png" alt="" width="45%"/>
 
 </div>
 
